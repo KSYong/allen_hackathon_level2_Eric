@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,19 +18,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="tcU-my-1bP">
-                                <rect key="frame" x="20" y="108" width="374" height="120"/>
+                                <rect key="frame" x="20" y="122" width="374" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="120" id="YRv-G7-kXO"/>
                                 </constraints>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8g8-d5-GKk">
-                                <rect key="frame" x="350" y="44" width="44" height="44"/>
+                                <rect key="frame" x="350" y="58" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="KbY-it-B7e"/>
                                     <constraint firstAttribute="width" constant="44" id="uCc-Y7-VmN"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="location.magnifyingglass" catalog="system">
+                                <buttonConfiguration key="configuration" style="plain" image="magnifyingglass" catalog="system">
                                     <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="font" weight="light">
                                         <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                     </preferredSymbolConfiguration>
@@ -38,15 +39,8 @@
                                     <action selector="searchLocationButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zz2-gq-wz4"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z2q-df-wgO">
-                                <rect key="frame" x="186" y="56" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W5G-1n-2ha">
-                                <rect key="frame" x="20" y="44" width="44" height="44"/>
+                                <rect key="frame" x="20" y="58" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="KGz-19-IDF"/>
                                     <constraint firstAttribute="width" constant="44" id="pBT-Bt-chy"/>
@@ -54,13 +48,22 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="location" catalog="system">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" weight="light">
-                                        <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                     </preferredSymbolConfiguration>
                                 </state>
                                 <connections>
                                     <action selector="grantLocationButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ECj-z2-bTD"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z2q-df-wgO">
+                                <rect key="frame" x="151.5" y="48" width="111.5" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="esb-cZ-HbB"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="44"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -68,10 +71,12 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tcU-my-1bP" secondAttribute="trailing" constant="20" id="1Ns-Fv-Qxq"/>
                             <constraint firstItem="tcU-my-1bP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="63j-5L-N0x"/>
                             <constraint firstItem="W5G-1n-2ha" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="6dv-0k-heM"/>
-                            <constraint firstItem="8g8-d5-GKk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="71z-KQ-GLN"/>
+                            <constraint firstItem="8g8-d5-GKk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="71z-KQ-GLN"/>
                             <constraint firstItem="tcU-my-1bP" firstAttribute="top" secondItem="W5G-1n-2ha" secondAttribute="bottom" constant="20" id="Cxt-Hv-Vgq"/>
-                            <constraint firstItem="W5G-1n-2ha" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="bRq-HB-5y6"/>
+                            <constraint firstItem="Z2q-df-wgO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Sdn-Ur-7EJ"/>
+                            <constraint firstItem="W5G-1n-2ha" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="bRq-HB-5y6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8g8-d5-GKk" secondAttribute="trailing" constant="20" id="xvJ-5a-chH"/>
+                            <constraint firstItem="Z2q-df-wgO" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="zgj-5D-V2J"/>
                         </constraints>
                     </view>
                     <connections>
@@ -87,8 +92,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="location" catalog="system" width="128" height="118"/>
-        <image name="location.magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="location" catalog="system" width="128" height="121"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
