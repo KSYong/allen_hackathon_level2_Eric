@@ -12,7 +12,7 @@ import CoreLocation
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var currentLocationLabel: UILabel!   // 현재 위치(도시 이름) 알려주는 라벨
+    @IBOutlet weak var currentCityNameLabel: UILabel!   // 현재 위치(도시 이름) 알려주는 라벨
     
     @IBOutlet weak var grantLocationPermissionButton: UIButton! // 위치 권한 획득 버튼
     @IBOutlet weak var searchLocationButton: UIButton! // 지역 탐색 버튼
@@ -20,26 +20,48 @@ class ViewController: UIViewController {
     @IBOutlet weak var locationMapView: MKMapView! // 지역 지도를 보여주는 맵 뷰
     
     var locationManager: CLLocationManager!
+    var currentLocation: CLLocation!
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         locationManagerSetup()
+        setupUI()
     }
     
     func locationManagerSetup() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+        
+        if hasLocationPermission() {
+            currentLocation = locationManager.location
+        }
+    }
+    
+    /// 사용자가 위치 서비스 이용에 동의했을 경우, 현재 위치 정보를 기반으로 도시 이름 표시하기
+    func setupUI() {
+        lookUpCurrentLocation { placemark in
+            DispatchQueue.main.async {
+                guard let placemark = placemark else {
+                    print("placemark가 nil입니다")
+                    return
+                }
+                self.currentCityNameLabel.text = placemark.locality
+            }
+        }
+        
     }
     
     
     
+    /// 위치 정보 사용 권한 획득 버튼
     @IBAction func grantLocationButtonTapped(_ sender: UIButton) {
+        // 앱의 위치 정보 사용 권한은 앱이 처음 실행될 때 한 번만 물어본다.
+        // 따라서 이후에는 alert를 이용해 디바이스의 설정 화면으로 이동해서 사용권한을 획득할 수 있도록 안내해야 한다.
+        
         if !hasLocationPermission(){
-            //            locationManager.requestWhenInUseAuthorization()
-            
             let alertController = UIAlertController(title: "위치 권한이 필요합니다", message: "설정에서 권한을 획득할 수 있습니다.", preferredStyle: .alert)
             
             let okAction = UIAlertAction(title: "설정으로!", style: .default, handler: {(cAlertAction) in
@@ -48,8 +70,8 @@ class ViewController: UIViewController {
             })
             
             let cancelAction = UIAlertAction(title: "싫어요", style: .destructive)
-            alertController.addAction(cancelAction)
             
+            alertController.addAction(cancelAction)
             alertController.addAction(okAction)
             
             self.present(alertController, animated: true, completion: nil)
@@ -76,6 +98,29 @@ class ViewController: UIViewController {
 
 extension ViewController: CLLocationManagerDelegate {
     
+    func lookUpCurrentLocation(completionHandler: @escaping (CLPlacemark?) -> Void ) {
+        // Use the last reported location.
+        if let lastLocation = self.locationManager.location {
+            let geocoder = CLGeocoder()
+            
+            // Look up the location and pass it to the completion handler
+            geocoder.reverseGeocodeLocation(lastLocation,
+                                            completionHandler: { (placemarks, error) in
+                if error == nil {
+                    let firstLocation = placemarks?[0]
+                    completionHandler(firstLocation)
+                }
+                else {
+                    // An error occurred during geocoding.
+                    completionHandler(nil)
+                }
+            })
+        }
+        else {
+            // No location was available.
+            completionHandler(nil)
+        }
+    }
     
     /// 현재 앱에서 위치 권한을 획득하고 있는가?
     /// - Returns: 참 또는 거짓 반환
@@ -118,5 +163,7 @@ extension ViewController: CLLocationManagerDelegate {
             print("Unknown default")
         }
     }
+    
+    
 }
 
