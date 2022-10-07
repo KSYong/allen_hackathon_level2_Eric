@@ -52,11 +52,15 @@ class ViewController: UIViewController {
             }
         }
         
+        let region = MKCoordinateRegion( center: locationManager.location!.coordinate, latitudinalMeters: CLLocationDistance(exactly: 10000)!, longitudinalMeters: CLLocationDistance(exactly: 10000)!)
+        locationMapView.setRegion(locationMapView.regionThatFits(region), animated: true)
+        
+        locationMapView.showsUserLocation = true
     }
     
     
     
-    /// 위치 정보 사용 권한 획득 버튼
+    /// 위치 정보 사용 권한 획득 버튼 눌렀을 때 실행되는 함수
     @IBAction func grantLocationButtonTapped(_ sender: UIButton) {
         // 앱의 위치 정보 사용 권한은 앱이 처음 실행될 때 한 번만 물어본다.
         // 따라서 이후에는 alert를 이용해 디바이스의 설정 화면으로 이동해서 사용권한을 획득할 수 있도록 안내해야 한다.
@@ -166,4 +170,3 @@ extension ViewController: CLLocationManagerDelegate {
     
     
 }
-

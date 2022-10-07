@@ -45,6 +45,7 @@
                                     <constraint firstAttribute="height" constant="44" id="KGz-19-IDF"/>
                                     <constraint firstAttribute="width" constant="44" id="pBT-Bt-chy"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="location" catalog="system">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" weight="light">
