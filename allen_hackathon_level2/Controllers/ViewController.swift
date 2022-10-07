@@ -19,15 +19,31 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var locationMapView: MKMapView! // 지역 지도를 보여주는 맵 뷰
     
+    @IBOutlet weak var weatherIcon: UIImageView!    // 날씨 아이콘을 띄우는 이미지뷰
+    
+    @IBOutlet weak var currentTempLabel: UILabel!   // 현재 온도를 표시하는 라벨
+    @IBOutlet weak var dailyMinimumTempLabel: UILabel!  // 오늘의 최저기온
+    @IBOutlet weak var dailyMaximumTempLabel: UILabel!  // 오늘의 최고기온
+    @IBOutlet weak var humidityLabel: UILabel!  // 습도
+    
+    @IBOutlet weak var weatherDescriptionLabel: UILabel!    // 날씨 설명
+    
     var locationManager: CLLocationManager!
     var currentLocation: CLLocation!
+    
+    let networkManager = NetworkManager.shared
+    let dataManager = DataManager.shared
+    
+    var weatherData: [Weather] = []
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         locationManagerSetup()
-        setupUI()
+        setupCurrentLocationLabel()
+
+        setupMapView()
     }
     
     func locationManagerSetup() {
@@ -37,11 +53,12 @@ class ViewController: UIViewController {
         
         if hasLocationPermission() {
             currentLocation = locationManager.location
+            setupWeatherDetails()
         }
     }
     
     /// 사용자가 위치 서비스 이용에 동의했을 경우, 현재 위치 정보를 기반으로 도시 이름 표시하기
-    func setupUI() {
+    func setupCurrentLocationLabel() {
         lookUpCurrentLocation { placemark in
             DispatchQueue.main.async {
                 guard let placemark = placemark else {
@@ -51,13 +68,72 @@ class ViewController: UIViewController {
                 self.currentCityNameLabel.text = placemark.locality
             }
         }
-        
+    }
+    
+    func setupMapView() {
         let region = MKCoordinateRegion( center: locationManager.location!.coordinate, latitudinalMeters: CLLocationDistance(exactly: 10000)!, longitudinalMeters: CLLocationDistance(exactly: 10000)!)
         locationMapView.setRegion(locationMapView.regionThatFits(region), animated: true)
-        
         locationMapView.showsUserLocation = true
     }
     
+    func setupWeatherDetails() {
+        networkManager.getWeatherJsonData(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude) { detailData, error in
+            let weatherIconName = detailData!.weather![0].icon
+            var weatherIcon: UIImage?
+            
+            switch weatherIconName {
+            case "01d":
+                weatherIcon = UIImage(systemName: "sun.max")
+            case "02d":
+                weatherIcon = UIImage(systemName: "cloud.sun")
+            case "03d":
+                weatherIcon = UIImage(systemName: "cloud")
+            case "04d":
+                weatherIcon = UIImage(systemName: "smoke")
+            case "09d":
+                weatherIcon = UIImage(systemName: "cloud.sun.rain")
+            case "10d":
+                weatherIcon = UIImage(systemName: "cloud.heavyrain")
+            case "11d":
+                weatherIcon = UIImage(systemName: "cloud.sun.bolt")
+            case "13d":
+                weatherIcon = UIImage(systemName: "snowflake")
+            case "50d":
+                weatherIcon = UIImage(systemName: "cloud.fog")
+                
+            case "01n":
+                weatherIcon = UIImage(systemName: "moon.stars")
+            case "02n":
+                weatherIcon = UIImage(systemName: "cloud.moon")
+            case "03n":
+                weatherIcon = UIImage(systemName: "cloud")
+            case "04n":
+                weatherIcon = UIImage(systemName: "smoke")
+            case "09n":
+                weatherIcon = UIImage(systemName: "cloud.moon.rain")
+            case "10n":
+                weatherIcon = UIImage(systemName: "cloud.heavyrain")
+            case "11n":
+                weatherIcon = UIImage(systemName: "cloud.moon.bolt")
+            case "13n":
+                weatherIcon = UIImage(systemName: "snowflake")
+            case "50n":
+                weatherIcon = UIImage(systemName: "cloud.fog")
+                
+            default:
+                weatherIcon = UIImage(systemName: "questionmark")
+            }
+            
+            DispatchQueue.main.async {
+                self.weatherIcon.image = weatherIcon
+                self.currentTempLabel.text = String(detailData!.main!.temp!) + "°C"
+                self.dailyMinimumTempLabel.text = String(detailData!.main!.tempMin!) + "°C"
+                self.dailyMaximumTempLabel.text = String(detailData!.main!.tempMax!) + "°C"
+                self.humidityLabel.text = String(detailData!.main!.humidity!) + "%"
+                self.weatherDescriptionLabel.text = detailData!.weather![0].weatherDescription
+            }
+        }
+    }
     
     
     /// 위치 정보 사용 권한 획득 버튼 눌렀을 때 실행되는 함수
