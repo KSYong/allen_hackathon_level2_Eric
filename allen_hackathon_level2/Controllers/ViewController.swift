@@ -81,55 +81,60 @@ class ViewController: UIViewController {
             let weatherIconName = detailData!.weather![0].icon
             var weatherIcon: UIImage?
             
+            let config = UIImage.SymbolConfiguration.preferringMulticolor()
+            
             switch weatherIconName {
             case "01d":
-                weatherIcon = UIImage(systemName: "sun.max")
+                weatherIcon = UIImage(systemName: "sun.max.fill")
             case "02d":
-                weatherIcon = UIImage(systemName: "cloud.sun")
+                weatherIcon = UIImage(systemName: "cloud.sun.fill")
             case "03d":
-                weatherIcon = UIImage(systemName: "cloud")
+                weatherIcon = UIImage(systemName: "cloud.fill")
             case "04d":
-                weatherIcon = UIImage(systemName: "smoke")
+                weatherIcon = UIImage(systemName: "smoke.fill")
             case "09d":
-                weatherIcon = UIImage(systemName: "cloud.sun.rain")
+                weatherIcon = UIImage(systemName: "cloud.sun.rain.fill")
             case "10d":
-                weatherIcon = UIImage(systemName: "cloud.heavyrain")
+                weatherIcon = UIImage(systemName: "cloud.heavyrain.fill")
             case "11d":
-                weatherIcon = UIImage(systemName: "cloud.sun.bolt")
+                weatherIcon = UIImage(systemName: "cloud.sun.bolt.fill")
             case "13d":
                 weatherIcon = UIImage(systemName: "snowflake")
             case "50d":
-                weatherIcon = UIImage(systemName: "cloud.fog")
+                weatherIcon = UIImage(systemName: "cloud.fog.fill")
                 
             case "01n":
-                weatherIcon = UIImage(systemName: "moon.stars")
+                weatherIcon = UIImage(systemName: "moon.stars.fill")
             case "02n":
-                weatherIcon = UIImage(systemName: "cloud.moon")
+                weatherIcon = UIImage(systemName: "cloud.moon.fill")
             case "03n":
-                weatherIcon = UIImage(systemName: "cloud")
+                weatherIcon = UIImage(systemName: "cloud.fill")
             case "04n":
-                weatherIcon = UIImage(systemName: "smoke")
+                weatherIcon = UIImage(systemName: "smoke.fill")
             case "09n":
-                weatherIcon = UIImage(systemName: "cloud.moon.rain")
+                weatherIcon = UIImage(systemName: "cloud.moon.rain.fill")
             case "10n":
-                weatherIcon = UIImage(systemName: "cloud.heavyrain")
+                weatherIcon = UIImage(systemName: "cloud.heavyrain.fill")
             case "11n":
-                weatherIcon = UIImage(systemName: "cloud.moon.bolt")
+                weatherIcon = UIImage(systemName: "cloud.moon.bolt.fill")
             case "13n":
                 weatherIcon = UIImage(systemName: "snowflake")
             case "50n":
-                weatherIcon = UIImage(systemName: "cloud.fog")
-                
+                weatherIcon = UIImage(systemName: "cloud.fog.fill")
+
             default:
-                weatherIcon = UIImage(systemName: "questionmark")
+                weatherIcon = UIImage(systemName: "exclamationmark.triangle.fill")
             }
+            
             
             DispatchQueue.main.async {
                 self.weatherIcon.image = weatherIcon
-                self.currentTempLabel.text = String(detailData!.main!.temp!) + "°C"
-                self.dailyMinimumTempLabel.text = String(detailData!.main!.tempMin!) + "°C"
-                self.dailyMaximumTempLabel.text = String(detailData!.main!.tempMax!) + "°C"
-                self.humidityLabel.text = String(detailData!.main!.humidity!) + "%"
+                self.weatherIcon.preferredSymbolConfiguration = config
+                
+                self.currentTempLabel.text = String(Int(round(detailData!.main!.temp!))) + "°"
+                self.dailyMinimumTempLabel.text = "최저 : " + String(Int(round(detailData!.main!.tempMin!))) + "°"
+                self.dailyMaximumTempLabel.text = "최고 : " + String(Int(round(detailData!.main!.tempMax!))) + "°"
+                self.humidityLabel.text = "습도 : " + String(detailData!.main!.humidity!) + "%"
                 self.weatherDescriptionLabel.text = detailData!.weather![0].weatherDescription
             }
         }
