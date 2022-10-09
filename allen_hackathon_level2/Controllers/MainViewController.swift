@@ -10,12 +10,13 @@ import MapKit
 import CoreLocation
 
 
-class ViewController: UIViewController {
+class MainViewController: UIViewController {
     
     @IBOutlet weak var currentCityNameLabel: UILabel!   // 현재 위치(도시 이름) 알려주는 라벨
     
     @IBOutlet weak var grantLocationPermissionButton: UIButton! // 위치 권한 획득 버튼
-    @IBOutlet weak var searchLocationButton: UIButton! // 지역 탐색 버튼
+   
+    @IBOutlet weak var searchCitiesButton: UIButton!    // 다른 지역을 찾는 뷰로 넘어가는 버튼
     
     @IBOutlet weak var locationMapView: MKMapView! // 지역 지도를 보여주는 맵 뷰
     
@@ -176,12 +177,9 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func searchLocationButtonTapped(_ sender: UIButton) {
-    }
-    
 }
 
-extension ViewController: CLLocationManagerDelegate {
+extension MainViewController: CLLocationManagerDelegate {
     
     func lookUpCurrentLocation(completionHandler: @escaping (CLPlacemark?) -> Void ) {
         // Use the last reported location.
