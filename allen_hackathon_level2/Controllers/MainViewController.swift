@@ -40,12 +40,23 @@ class MainViewController: UIViewController {
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
+        overrideUserInterfaceStyle = .dark
         
         locationManagerSetup()
         setupCurrentLocationLabel()
 
         setupMapView()
     }
+    
+    // 뷰컨트롤러에서 네비게이션 바 숨기기
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     
     func locationManagerSetup() {
         locationManager = CLLocationManager()

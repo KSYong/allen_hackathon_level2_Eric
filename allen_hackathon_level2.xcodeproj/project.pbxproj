@@ -12,10 +12,9 @@
 		600EE62B28EFC3C4007423E3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600EE62A28EFC3C4007423E3 /* Constants.swift */; };
 		600EE62D28EFC42D007423E3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600EE62C28EFC42D007423E3 /* DataManager.swift */; };
 		600EE62F28EFC439007423E3 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600EE62E28EFC439007423E3 /* WeatherData.swift */; };
-		601C22D428F2FD7500E90BD3 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C22D328F2FD7500E90BD3 /* ConfigViewController.swift */; };
 		601C22D628F2FDAE00E90BD3 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C22D528F2FDAE00E90BD3 /* SearchViewController.swift */; };
-		601C22D828F2FDF300E90BD3 /* ConfigTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C22D728F2FDF300E90BD3 /* ConfigTableViewCell.swift */; };
-		601C22DA28F2FDFD00E90BD3 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C22D928F2FDFD00E90BD3 /* SearchTableViewCell.swift */; };
+		601C22D828F2FDF300E90BD3 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C22D728F2FDF300E90BD3 /* SearchTableViewCell.swift */; };
+		6063E42828F4335D000B3058 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6063E42728F4335D000B3058 /* SettingsTableViewController.swift */; };
 		6091659728ED8D05002F7A82 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6091659628ED8D05002F7A82 /* AppDelegate.swift */; };
 		6091659928ED8D05002F7A82 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6091659828ED8D05002F7A82 /* SceneDelegate.swift */; };
 		6091659B28ED8D05002F7A82 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6091659A28ED8D05002F7A82 /* MainViewController.swift */; };
@@ -30,10 +29,9 @@
 		600EE62A28EFC3C4007423E3 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		600EE62C28EFC42D007423E3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		600EE62E28EFC439007423E3 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
-		601C22D328F2FD7500E90BD3 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		601C22D528F2FDAE00E90BD3 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		601C22D728F2FDF300E90BD3 /* ConfigTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigTableViewCell.swift; sourceTree = "<group>"; };
-		601C22D928F2FDFD00E90BD3 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		601C22D728F2FDF300E90BD3 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		6063E42728F4335D000B3058 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		6091659328ED8D05002F7A82 /* allen_hackathon_level2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = allen_hackathon_level2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6091659628ED8D05002F7A82 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6091659828ED8D05002F7A82 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -118,8 +116,7 @@
 		609165AB28ED8D74002F7A82 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				601C22D728F2FDF300E90BD3 /* ConfigTableViewCell.swift */,
-				601C22D928F2FDFD00E90BD3 /* SearchTableViewCell.swift */,
+				601C22D728F2FDF300E90BD3 /* SearchTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -128,8 +125,8 @@
 			isa = PBXGroup;
 			children = (
 				6091659A28ED8D05002F7A82 /* MainViewController.swift */,
-				601C22D328F2FD7500E90BD3 /* ConfigViewController.swift */,
 				601C22D528F2FDAE00E90BD3 /* SearchViewController.swift */,
+				6063E42728F4335D000B3058 /* SettingsTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -208,15 +205,14 @@
 				601C22D628F2FDAE00E90BD3 /* SearchViewController.swift in Sources */,
 				600EE62628EFC121007423E3 /* NetworkManager.swift in Sources */,
 				6091659B28ED8D05002F7A82 /* MainViewController.swift in Sources */,
-				601C22D828F2FDF300E90BD3 /* ConfigTableViewCell.swift in Sources */,
+				601C22D828F2FDF300E90BD3 /* SearchTableViewCell.swift in Sources */,
 				6091659728ED8D05002F7A82 /* AppDelegate.swift in Sources */,
 				600EE62D28EFC42D007423E3 /* DataManager.swift in Sources */,
 				6091659928ED8D05002F7A82 /* SceneDelegate.swift in Sources */,
 				600EE62928EFC397007423E3 /* Storage.swift in Sources */,
+				6063E42828F4335D000B3058 /* SettingsTableViewController.swift in Sources */,
 				600EE62F28EFC439007423E3 /* WeatherData.swift in Sources */,
-				601C22DA28F2FDFD00E90BD3 /* SearchTableViewCell.swift in Sources */,
 				600EE62B28EFC3C4007423E3 /* Constants.swift in Sources */,
-				601C22D428F2FD7500E90BD3 /* ConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

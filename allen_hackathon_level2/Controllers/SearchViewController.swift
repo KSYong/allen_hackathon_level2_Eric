@@ -9,9 +9,14 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
+    var weatherData: [WeatherData]?
+    
+    @IBOutlet weak var cityTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        overrideUserInterfaceStyle = .dark
+        
         // Do any additional setup after loading the view.
     }
     
@@ -27,3 +32,4 @@ class SearchViewController: UIViewController {
     */
 
 }
+
