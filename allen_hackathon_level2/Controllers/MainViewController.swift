@@ -47,29 +47,12 @@ class MainViewController: UIViewController {
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
+        print("뷰디드로드")
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         self.navigationController?.overrideUserInterfaceStyle = .dark
         
         locationManagerSetup()
-    }
-    
-    // vieWillAppea
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // 도시 선택도 안하고 위치 정보도 없다면 다시 서치뷰컨으로 보내기
-//        if !didSelectCity && !gpsPermission && isFirstExecution {
-//            performSegue(withIdentifier: "showSearchVC", sender: self)
-//        }
-        
-        if isCurrentLocation == true {
-            grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
-            currentLocationIndicatorLabel.text = "현재 위치 사용 중"
-        } else {
-            grantLocationPermissionButton.setImage(UIImage(systemName: "location"), for: .normal)
-            currentLocationIndicatorLabel.text = ""
-        }
     }
     
     // 네비게이션 바 숨기기
@@ -80,6 +63,22 @@ class MainViewController: UIViewController {
     
     /// 위치권한 업데이트
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if !gpsPermission && !didSelectCity {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "showSearchVC", sender: self)
+            }
+        }
+
+        if isCurrentLocation == true {
+            grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+            currentLocationIndicatorLabel.text = "현재 위치 사용 중"
+        } else {
+            grantLocationPermissionButton.setImage(UIImage(systemName: "location"), for: .normal)
+            currentLocationIndicatorLabel.text = ""
+        }
+        
         if hasLocationPermission() {
             gpsPermission = true
         } else {
@@ -240,9 +239,10 @@ extension MainViewController: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         case .denied, .notDetermined, .restricted:
-            performSegue(withIdentifier: "showSearchVC", sender: self)
+            gpsPermission = false
         case .authorizedAlways, .authorizedWhenInUse:
             currentLocation = locationManager.location
+            gpsPermission = true
         @unknown default:
             print("Error: unknown")
         }
