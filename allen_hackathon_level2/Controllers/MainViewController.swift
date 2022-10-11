@@ -9,6 +9,13 @@ import UIKit
 import MapKit
 import CoreLocation
 
+protocol SendWeatherDataDelegate {
+    func sendWeatherData(data: WeatherData)
+}
+
+protocol SendLocationPermissionDelegate {
+    func sendLocationPermission(isGranted: Bool)
+}
 
 class MainViewController: UIViewController {
     
@@ -29,13 +36,19 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var weatherDescriptionLabel: UILabel!    // 날씨 설명
     
+    @IBOutlet weak var currentLocationIndicatorLabel: UILabel!
+    
     var locationManager: CLLocationManager!
     var currentLocation: CLLocation!
     
     let networkManager = NetworkManager.shared
     let dataManager = DataManager.shared
     
-    var weatherData: [Weather] = []
+    var weatherData: [WeatherData] = []
+    
+    var isCurrentLocation: Bool = false
+    var gpsPermission: Bool = false
+    var didSelectCity: Bool = false
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
@@ -43,29 +56,50 @@ class MainViewController: UIViewController {
         overrideUserInterfaceStyle = .dark
         
         locationManagerSetup()
-        setupCurrentLocationLabel()
-
-        setupMapView()
+        
     }
     
     // 뷰컨트롤러에서 네비게이션 바 숨기기
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        if isCurrentLocation == true {
+            grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+            currentLocationIndicatorLabel.text = "현재 위치 사용 중"
+        } else {
+            grantLocationPermissionButton.setImage(UIImage(systemName: "location"), for: .normal)
+            currentLocationIndicatorLabel.text = ""
+        }
     }
     
+    /// 위치권한 업데이트
+    override func viewDidAppear(_ animated: Bool) {
+        if hasLocationPermission() {
+            gpsPermission = true
+        } else {
+            gpsPermission = false
+        }
+    }
+    
+    /// 다른 뷰로 이동할 때 숨긴 네비게이션 바 보이기
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    
+    /// 위치 권한 획득을 위한 locationManager 설정
     func locationManagerSetup() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
         if hasLocationPermission() {
+            gpsPermission = true
+            isCurrentLocation = true
             currentLocation = locationManager.location
-            setupWeatherDetails()
+            setupWeatherDetails(lat: currentLocation.coordinate.latitude, lon: currentLocation.coordinate.longitude)
+            setupCurrentLocationLabel()
+            setupMapView(center: CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude))
+        } else {
+            gpsPermission = false
         }
     }
     
@@ -82,17 +116,16 @@ class MainViewController: UIViewController {
         }
     }
     
-    func setupMapView() {
-        let region = MKCoordinateRegion( center: locationManager.location!.coordinate, latitudinalMeters: CLLocationDistance(exactly: 10000)!, longitudinalMeters: CLLocationDistance(exactly: 10000)!)
+    func setupMapView(center: CLLocationCoordinate2D ) {
+        let region = MKCoordinateRegion( center: center, latitudinalMeters: CLLocationDistance(exactly: 10000)!, longitudinalMeters: CLLocationDistance(exactly: 10000)!)
         locationMapView.setRegion(locationMapView.regionThatFits(region), animated: true)
         locationMapView.showsUserLocation = true
     }
     
-    func setupWeatherDetails() {
-        networkManager.getWeatherJsonData(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude) { detailData, error in
+    func setupWeatherDetails(lat: Double, lon: Double) {
+        networkManager.getWeatherJsonData(latitude: lat, longitude: lon) { detailData, error in
             let weatherIconName = detailData!.weather![0].icon
             var weatherIcon: UIImage?
-            
             let config = UIImage.SymbolConfiguration.preferringMulticolor()
             
             switch weatherIconName {
@@ -138,7 +171,6 @@ class MainViewController: UIViewController {
                 weatherIcon = UIImage(systemName: "exclamationmark.triangle.fill")
             }
             
-            
             DispatchQueue.main.async {
                 self.weatherIcon.image = weatherIcon
                 self.weatherIcon.preferredSymbolConfiguration = config
@@ -152,45 +184,65 @@ class MainViewController: UIViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showSearchVC" {
+            let searchVC = segue.destination as! SearchViewController
+            searchVC.delegate = self
+        } else if segue.identifier == "showSettingsVC" {
+            let settingsVC = segue.destination as! SettingsTableViewController
+            settingsVC.delegate = self
+            settingsVC.gpsPermission = self.gpsPermission
+        }
+    }
     
     /// 위치 정보 사용 권한 획득 버튼 눌렀을 때 실행되는 함수
     @IBAction func grantLocationButtonTapped(_ sender: UIButton) {
         // 앱의 위치 정보 사용 권한은 앱이 처음 실행될 때 한 번만 물어본다.
         // 따라서 이후에는 alert를 이용해 디바이스의 설정 화면으로 이동해서 사용권한을 획득할 수 있도록 안내해야 한다.
         
+        // 현재 위치의 날씨 정보를 볼 것인지 물어본다
+        
+        // 위치 정보 사용 권한이 없다면 설정 탭에서 위치 권한 획득하도록 안내
         if !hasLocationPermission(){
-            let alertController = UIAlertController(title: "위치 권한이 필요합니다", message: "설정에서 권한을 획득할 수 있습니다.", preferredStyle: .alert)
-            
-            let okAction = UIAlertAction(title: "설정으로!", style: .default, handler: {(cAlertAction) in
-                //Redirect to Settings app
-                UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
-            })
-            
-            let cancelAction = UIAlertAction(title: "싫어요", style: .destructive)
+            let alertController = UIAlertController(title: "위치 권한이 필요합니다", message: "설정 탭에서 위치 권한 설정이 가능합니다.", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "알겠어요!", style: .destructive)
             
             alertController.addAction(cancelAction)
-            alertController.addAction(okAction)
             
             self.present(alertController, animated: true, completion: nil)
         } else {
-            
-            let alertController = UIAlertController(title: "이미 GPS 권한을 획득하셨습니다!", message: "설정에서 권한을 제거할 수 있습니다.", preferredStyle: .alert)
-            
-            let okayAction = UIAlertAction(title: "알겠어요!", style: .default)
-            let cancelAction = UIAlertAction(title: "설정으로", style: .destructive) { cAlertAction in
-                UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+            // 위치 정보 사용 권한이 있다면...
+            // 현재 위치를 사용중이지 않다면
+            if !isCurrentLocation {
+                // 탭했을 때 현재 위치를 상용하겠다는 의미
+                // 아이콘 변경 및 현재 위치 내용으로 ui 변경
+                currentLocation = locationManager.location
+                setupCurrentLocationLabel()
+                setupWeatherDetails(lat: currentLocation.coordinate.latitude, lon: currentLocation.coordinate.longitude)
+                setupMapView(center: CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude))
+                grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+                currentLocationIndicatorLabel.text = "현재 위치 사용 중"
             }
-            
-            alertController.addAction(cancelAction)
-            alertController.addAction(okayAction)
-            
-            self.present(alertController, animated: true, completion: nil)
+            // 현재 위치를 사용중이라면
+            // 탭했을 때에는 현재 위치를 사용하지 않겠다는 뜻이고
+            // 이는 지역 검색을 통해 해결할 수 있기 때문에
+            // 따로 아무런 반응이 없도록 해서 지역 검색 하도록 유도
         }
     }
-    
 }
 
 extension MainViewController: CLLocationManagerDelegate {
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .denied, .notDetermined, .restricted:
+            performSegue(withIdentifier: "showSearchVC", sender: self)
+        case .authorizedAlways, .authorizedWhenInUse:
+            currentLocation = locationManager.location
+        @unknown default:
+            print("Error: unknown")
+        }
+    }
     
     func lookUpCurrentLocation(completionHandler: @escaping (CLPlacemark?) -> Void ) {
         // Use the last reported location.
@@ -237,26 +289,29 @@ extension MainViewController: CLLocationManagerDelegate {
     func getLocationUsagePermission() {
         self.locationManager.requestWhenInUseAuthorization()
     }
+}
+
+extension MainViewController: SendWeatherDataDelegate {
     
-    /// 권한 변경이 일어났을 때 동작 구현
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch manager.authorizationStatus {
-            
-        case .authorizedAlways, .authorizedWhenInUse:
-            // GPS 권한 획득
-            grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
-        case .restricted, .notDetermined:
-            // GPS 권한 설정되지 않음
-            grantLocationPermissionButton.setImage(UIImage(systemName: "location"), for: .normal)
-        case .denied:
-            // GPS 권한 거부됨
-            grantLocationPermissionButton.setImage(UIImage(systemName: "location"), for: .normal)
-            
-        @unknown default:
-            // 그 외의 경우
-            print("Unknown default")
-        }
+    func sendWeatherData(data: WeatherData) {
+        currentCityNameLabel.text = data.cityName
+        setupWeatherDetails(lat: data.latitude, lon: data.longitude)
+        setupMapView(center: CLLocationCoordinate2D(latitude: data.latitude, longitude: data.longitude))
+        didSelectCity = true
+        isCurrentLocation = false
+        grantLocationPermissionButton.setImage(UIImage(systemName: "location"), for: .normal)
     }
+    
+}
+
+extension MainViewController: SendLocationPermissionDelegate {
+    func sendLocationPermission(isGranted: Bool) {
+        if gpsPermission != isGranted {
+            
+        }
+        
+    }
+    
     
     
 }

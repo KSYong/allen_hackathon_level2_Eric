@@ -9,27 +9,44 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
-    var weatherData: [WeatherData]?
-    
     @IBOutlet weak var cityTableView: UITableView!
-    
+
+    let dataManager = DataManager.shared
+        
+    var weatherData: [WeatherData]?
+
+    var delegate: SendWeatherDataDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         
-        // Do any additional setup after loading the view.
+        dataManager.makeWeatherData()
+        weatherData = dataManager.getWeatherData()
+        cityTableView.dataSource = self
+        cityTableView.delegate = self
+    }
+}
+
+extension SearchViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return weatherData!.count
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cityCell", for: indexPath) as! SearchTableViewCell
+        cell.cityNameLabel.text = weatherData?[indexPath.row].cityName
+        tableView.deselectRow(at: indexPath, animated: true)
+        return cell
     }
-    */
+}
 
+extension SearchViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.sendWeatherData(data: weatherData![indexPath.row])
+        print("\(weatherData![indexPath.row].cityName) 선택됨")
+        self.navigationController?.popViewController(animated: true)
+    }
 }
 

@@ -15,6 +15,7 @@
 		601C22D628F2FDAE00E90BD3 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C22D528F2FDAE00E90BD3 /* SearchViewController.swift */; };
 		601C22D828F2FDF300E90BD3 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C22D728F2FDF300E90BD3 /* SearchTableViewCell.swift */; };
 		6063E42828F4335D000B3058 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6063E42728F4335D000B3058 /* SettingsTableViewController.swift */; };
+		6063E42E28F53989000B3058 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6063E42D28F53989000B3058 /* PrivacyViewController.swift */; };
 		6091659728ED8D05002F7A82 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6091659628ED8D05002F7A82 /* AppDelegate.swift */; };
 		6091659928ED8D05002F7A82 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6091659828ED8D05002F7A82 /* SceneDelegate.swift */; };
 		6091659B28ED8D05002F7A82 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6091659A28ED8D05002F7A82 /* MainViewController.swift */; };
@@ -32,6 +33,7 @@
 		601C22D528F2FDAE00E90BD3 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		601C22D728F2FDF300E90BD3 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		6063E42728F4335D000B3058 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		6063E42D28F53989000B3058 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
 		6091659328ED8D05002F7A82 /* allen_hackathon_level2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = allen_hackathon_level2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6091659628ED8D05002F7A82 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6091659828ED8D05002F7A82 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				6091659A28ED8D05002F7A82 /* MainViewController.swift */,
 				601C22D528F2FDAE00E90BD3 /* SearchViewController.swift */,
 				6063E42728F4335D000B3058 /* SettingsTableViewController.swift */,
+				6063E42D28F53989000B3058 /* PrivacyViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 			files = (
 				601C22D628F2FDAE00E90BD3 /* SearchViewController.swift in Sources */,
 				600EE62628EFC121007423E3 /* NetworkManager.swift in Sources */,
+				6063E42E28F53989000B3058 /* PrivacyViewController.swift in Sources */,
 				6091659B28ED8D05002F7A82 /* MainViewController.swift in Sources */,
 				601C22D828F2FDF300E90BD3 /* SearchTableViewCell.swift in Sources */,
 				6091659728ED8D05002F7A82 /* AppDelegate.swift in Sources */,
