@@ -6,72 +6,121 @@
 //
 
 import UIKit
+import CoreLocation
 
 class SettingsTableViewController: UITableViewController {
     
     @IBOutlet weak var gpsGrantedSwitch: UISwitch!
     
-    var gpsPermission: Bool?
-    
     var delegate: SendLocationPermissionDelegate?
     
     private var observer: NSObjectProtocol?
     
+    var locationManager: CLLocationManager!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
+        gpsGrantedSwitch.setOn(false, animated: true)
         
-        // NotificationCenter를 활용해
-        observer = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main, using: { notification in
-            if self.gpsPermission! {
-                self.gpsGrantedSwitch.isOn = true
-            } else {
-                self.gpsGrantedSwitch.isOn = false
-            }
-        })
+        locationManager = CLLocationManager()
+        /// NotificationCenter를 활용해 현재 위치 사용 설정을 완료 후 되돌아왔음을 알고, 스위치 정보를 업데이트한다.
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIScene.willEnterForegroundNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.didBecomeActiveNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.willEnterForegroundNotification, object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.willEnterForegroundNotification, object: nil)
+        }
+//        observer = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main, using: { [unowned self] notification in
+//            if hasLocationPermission() {
+//                gpsGrantedSwitch.setOn(true, animated: true)
+//            } else {
+//                gpsGrantedSwitch.setOn(false, animated: true)
+//            }
+//        })
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if gpsPermission! {
-            gpsGrantedSwitch.isOn = true
+        super.viewWillAppear(animated)
+        if hasLocationPermission() {
+            gpsGrantedSwitch.setOn(true, animated: true)
         } else {
-            gpsGrantedSwitch.isOn = false
+            gpsGrantedSwitch.setOn(false, animated: true)
         }
+        print(gpsGrantedSwitch.isOn)
     }
 
+    @objc func activateSwitch() {
+        if hasLocationPermission() {
+            gpsGrantedSwitch.setOn(true, animated: true)
+        } else {
+            gpsGrantedSwitch.setOn(false, animated: true)
+        }
+    }
+    
     @IBAction func gpsGrantedSwitchTapped(_ sender: UISwitch) {
-        if !gpsGrantedSwitch.isOn {
+        if gpsGrantedSwitch.isOn {
             let alertController = UIAlertController(title: "위치 권한을 허용하시겠습니까?", message: "설정에서 권한을 허용할 수 있습니다.", preferredStyle: .alert)
-            
+
             let okAction = UIAlertAction(title: "설정으로!", style: .default, handler: {(cAlertAction) in
                 //Redirect to Settings app
                 UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
             })
-            
+
             let cancelAction = UIAlertAction(title: "싫어요", style: .destructive)
-            
+
             alertController.addAction(cancelAction)
             alertController.addAction(okAction)
-            
+
             self.present(alertController, animated: true, completion: nil)
         } else {
             let alertController = UIAlertController(title: "위치 권한을 제한하시겠습니까?", message: "설정에서 권한을 제한할 수 있습니다.", preferredStyle: .alert)
-            
+
             let okAction = UIAlertAction(title: "설정으로!", style: .default, handler: {(cAlertAction) in
                 //Redirect to Settings app
                 UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
             })
-            
+
             let cancelAction = UIAlertAction(title: "싫어요", style: .destructive)
-            
+
             alertController.addAction(cancelAction)
             alertController.addAction(okAction)
-            
+
             self.present(alertController, animated: true, completion: nil)
         }
-        gpsPermission?.toggle()
-        gpsGrantedSwitch.isOn.toggle()
+
+        if hasLocationPermission() {
+            gpsGrantedSwitch.setOn(true, animated: true)
+        } else {
+            gpsGrantedSwitch.setOn(false, animated: true)
+        }
+
+//        gpsPermission?.toggle()
+//        gpsGrantedSwitch.isOn.toggle()
         delegate?.sendLocationPermission(isGranted: gpsGrantedSwitch.isOn)
+    }
+    
+    /// 현재 앱에서 위치 권한을 획득하고 있는가?
+    /// - Returns: 참 또는 거짓 반환
+    func hasLocationPermission() -> Bool {
+        var hasPermission = false
+        
+        switch self.locationManager.authorizationStatus {
+        case .notDetermined, .restricted, .denied:
+            hasPermission = false
+        case .authorizedAlways, .authorizedWhenInUse:
+            hasPermission = true
+        @unknown default:
+            break
+        }
+        
+        return hasPermission
     }
     
     deinit {

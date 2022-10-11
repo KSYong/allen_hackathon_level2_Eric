@@ -20,11 +20,8 @@ protocol SendLocationPermissionDelegate {
 class MainViewController: UIViewController {
     
     @IBOutlet weak var currentCityNameLabel: UILabel!   // 현재 위치(도시 이름) 알려주는 라벨
-    
     @IBOutlet weak var grantLocationPermissionButton: UIButton! // 위치 권한 획득 버튼
-   
     @IBOutlet weak var searchCitiesButton: UIButton!    // 다른 지역을 찾는 뷰로 넘어가는 버튼
-    
     @IBOutlet weak var locationMapView: MKMapView! // 지역 지도를 보여주는 맵 뷰
     
     @IBOutlet weak var weatherIcon: UIImageView!    // 날씨 아이콘을 띄우는 이미지뷰
@@ -33,16 +30,14 @@ class MainViewController: UIViewController {
     @IBOutlet weak var dailyMinimumTempLabel: UILabel!  // 오늘의 최저기온
     @IBOutlet weak var dailyMaximumTempLabel: UILabel!  // 오늘의 최고기온
     @IBOutlet weak var humidityLabel: UILabel!  // 습도
-    
     @IBOutlet weak var weatherDescriptionLabel: UILabel!    // 날씨 설명
+    @IBOutlet weak var currentLocationIndicatorLabel: UILabel!  // 현재 위치 사용중인지 알려주는 라벨
     
-    @IBOutlet weak var currentLocationIndicatorLabel: UILabel!
-    
-    var locationManager: CLLocationManager!
     var currentLocation: CLLocation!
     
     let networkManager = NetworkManager.shared
     let dataManager = DataManager.shared
+    var locationManager: CLLocationManager!
     
     var weatherData: [WeatherData] = []
     
@@ -54,14 +49,20 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
+        self.navigationController?.overrideUserInterfaceStyle = .dark
         
         locationManagerSetup()
-        
     }
     
-    // 뷰컨트롤러에서 네비게이션 바 숨기기
+    // vieWillAppea
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        super.viewWillAppear(animated)
+        
+        // 도시 선택도 안하고 위치 정보도 없다면 다시 서치뷰컨으로 보내기
+//        if !didSelectCity && !gpsPermission && isFirstExecution {
+//            performSegue(withIdentifier: "showSearchVC", sender: self)
+//        }
+        
         if isCurrentLocation == true {
             grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
             currentLocationIndicatorLabel.text = "현재 위치 사용 중"
@@ -71,6 +72,12 @@ class MainViewController: UIViewController {
         }
     }
     
+    // 네비게이션 바 숨기기
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
     /// 위치권한 업데이트
     override func viewDidAppear(_ animated: Bool) {
         if hasLocationPermission() {
@@ -78,11 +85,6 @@ class MainViewController: UIViewController {
         } else {
             gpsPermission = false
         }
-    }
-    
-    /// 다른 뷰로 이동할 때 숨긴 네비게이션 바 보이기
-    override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     /// 위치 권한 획득을 위한 locationManager 설정
@@ -116,12 +118,14 @@ class MainViewController: UIViewController {
         }
     }
     
+    // 맵뷰 설정하기
     func setupMapView(center: CLLocationCoordinate2D ) {
         let region = MKCoordinateRegion( center: center, latitudinalMeters: CLLocationDistance(exactly: 10000)!, longitudinalMeters: CLLocationDistance(exactly: 10000)!)
         locationMapView.setRegion(locationMapView.regionThatFits(region), animated: true)
         locationMapView.showsUserLocation = true
     }
     
+    // 날씨 정보 라벨 채우기
     func setupWeatherDetails(lat: Double, lon: Double) {
         networkManager.getWeatherJsonData(latitude: lat, longitude: lon) { detailData, error in
             let weatherIconName = detailData!.weather![0].icon
@@ -191,7 +195,6 @@ class MainViewController: UIViewController {
         } else if segue.identifier == "showSettingsVC" {
             let settingsVC = segue.destination as! SettingsTableViewController
             settingsVC.delegate = self
-            settingsVC.gpsPermission = self.gpsPermission
         }
     }
     
@@ -222,6 +225,7 @@ class MainViewController: UIViewController {
                 setupMapView(center: CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude))
                 grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
                 currentLocationIndicatorLabel.text = "현재 위치 사용 중"
+                isCurrentLocation = true
             }
             // 현재 위치를 사용중이라면
             // 탭했을 때에는 현재 위치를 사용하지 않겠다는 뜻이고
@@ -307,11 +311,12 @@ extension MainViewController: SendWeatherDataDelegate {
 extension MainViewController: SendLocationPermissionDelegate {
     func sendLocationPermission(isGranted: Bool) {
         if gpsPermission != isGranted {
-            
+            // gpsPermission이 설정 뷰컨에서 넘어온 값과 다르다면
+            if hasLocationPermission() {
+                gpsPermission = true
+            } else {
+                gpsPermission = false
+            }
         }
-        
     }
-    
-    
-    
 }
