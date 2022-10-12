@@ -1,7 +1,5 @@
 >## 제1회 iOS 해커톤 - with 루나 at the 앨런 스쿨 참가 레포지토리
 
-</br>
-
 # ERIC'S WEATHER APP
 
 </br>
