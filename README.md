@@ -102,7 +102,13 @@
 
 </br>
 
-작성 예정
+* ### 앱에게 위치 권한이 없을 때, 앱을 실행하면 SearchView가 두 번 나타나는 문제
+ * 문제 발생 이유
+  CLLocationManagerDelegate의 locationManagerDidChangeAuthorization은 권한 설정이 변경될 때 마다 호출되는데, 해당 함수 안에서 앱이 위치 권한이 없는 경우의 performSegue를 실행했기 때문에 생긴 문제이다. 
+  * 문제 해결 방법
+   Bool 변수를 추가해 원하는 조건 아래에서만 perofrmSegue가 실행되도록 하였다.
+   
+ 
 
 </br>
 
