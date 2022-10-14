@@ -120,11 +120,12 @@
   * 문제 해결 방법
     * NotificationCenter를 활용해 .didBecomeActiveNotification이 감지될 때, 즉 앱이 active 상태로 들어설 때 UISwitch 업데이트 함수를 실행하도록 변경해 주었다.
       ```swift
-      // NotificationCenter를 활용해 현재 위치 사용 설정을 완료 후 되돌아왔음을 알고, 스위치 정보를 업데이트한다.
+         // NotificationCenter를 활용해 현재 위치 사용 설정을 완료 후 되돌아왔음을 알고, 스위치 정보를 업데이트한다.
          NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.didBecomeActiveNotification, object: nil)
          
          ...
          
+         // 옵저버 사용 후에는 꼭 deinit에서 할당 해제를 잊지 말자
          deinit {
             if let observer = observer {
               NotificationCenter.default.removeObserver(observer)
