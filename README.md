@@ -122,6 +122,14 @@
       ```swift
       // NotificationCenter를 활용해 현재 위치 사용 설정을 완료 후 되돌아왔음을 알고, 스위치 정보를 업데이트한다.
          NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.didBecomeActiveNotification, object: nil)
+         
+         ...
+         
+         deinit {
+            if let observer = observer {
+              NotificationCenter.default.removeObserver(observer)
+            }
+          }
       ```
  
 
