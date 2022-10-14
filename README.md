@@ -133,16 +133,16 @@
           }
       ```
  * ### 라이트모드 및 다크모드 적용 시 테마가 달라지는 문제
-  * 문제 발생 이유
-    * system 폰트 및 컬러를 사용하였기 때문에 light/dark 모드에 따라 색이 변하는 문제가 있었다.
-  * 문제 해결 방법
-    * 각 뷰들에 대한 설정을 각각 바꿔주는 것 보다는 viewDidLoad() 시에 강제 다크 모드를 적용하여 문제를 해결하였다.
-      ```swift
-       override func viewDidLoad() {
-         super.viewDidLoad()
-         overrideUserInterfaceStyle = .dark
-       }
-       ```
+   * 문제 발생 이유
+     * system 폰트 및 컬러를 사용하였기 때문에 light/dark 모드에 따라 색이 변하는 문제가 있었다.
+   * 문제 해결 방법
+     * 각 뷰들에 대한 설정을 각각 바꿔주는 것 보다는 viewDidLoad() 시에 강제 다크 모드를 적용하여 문제를 해결하였다.
+       ```swift
+        override func viewDidLoad() {
+          super.viewDidLoad()
+          overrideUserInterfaceStyle = .dark
+        }
+        ```
 
 </br>
 
