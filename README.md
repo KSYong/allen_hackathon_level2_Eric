@@ -114,7 +114,15 @@
                 }
             }
             ```
-   
+* ### 앱이 백그라운드에서 포어그라운드로 돌아올 때 UISwitch가 업데이트되지 않는 문제
+  * 문제 발생 이유
+    * 뷰컨트롤러의 라이프 사이클 함수는 앱이 inactive 상태에서 active 상태로 바뀔 때는 호출되지 않는다는 점을 모르고, 뷰 라이프 사이클 함수에 UISwitch 상태 업데이트 함수를 구현하였다.
+  * 문제 해결 방법
+    * NotificationCenter를 활용해 .didBecomeActiveNotification이 감지될 때, 즉 앱이 active 상태로 들어설 때 UISwitch 업데이트 함수를 실행하도록 변경해 주었다.
+      ```swift
+      // NotificationCenter를 활용해 현재 위치 사용 설정을 완료 후 되돌아왔음을 알고, 스위치 정보를 업데이트한다.
+         NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.didBecomeActiveNotification, object: nil)
+      ```
  
 
 </br>
