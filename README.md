@@ -26,7 +26,7 @@
 </p>
 
    * 위치 설정 켜기
-<p aligh="center">
+<p align="center">
 <img src="https://user-images.githubusercontent.com/22342277/195775564-717939a5-4927-4a8f-a5b3-14aba70706ea.gif" style="width:200px"/>
 </p>
 
