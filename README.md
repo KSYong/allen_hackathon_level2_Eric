@@ -14,6 +14,10 @@
 
 * 팀원 : 권승용 [https://github.com/KSYong]
 
+* 구동 화면
+
+![앨런날씨앱](https://user-images.githubusercontent.com/22342277/195771483-977b0ec4-7346-4c4f-a098-
+
 </br>
 
 ## 개발 환경 및 라이브러리
