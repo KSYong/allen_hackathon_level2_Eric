@@ -19,7 +19,7 @@
 
   * 위치 설정 끄기<p align="center"><img src="https://user-images.githubusercontent.com/22342277/195776617-5139184c-e880-4654-a6a2-d1f3b9559917.gif" style="width:300px"/></p>
   
-  * 위치 설정 켜기<p align="center"><img src="https://user-images.githubusercontent.com/22342277/195775564-717939a5-4927-4a8f-a5b3-14aba70706ea.gif" style="width:300px"/></p>
+  * 위치 설정 켜기 및 현재 위치로 이동<p align="center"><img src="https://user-images.githubusercontent.com/22342277/195775564-717939a5-4927-4a8f-a5b3-14aba70706ea.gif" style="width:300px"/></p>
 
 </br>
 
