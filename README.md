@@ -143,7 +143,18 @@
           overrideUserInterfaceStyle = .dark
         }
         ```
-
+        
+ * ### 뷰컨트롤러는 다크 모드가 강제 적용되었지만, 네비게이션 컨트롤러는 적용되지 않는 문제
+   * 문제 발생 이유
+     * 네비게이션 컨트롤러가 별개의 뷰컨트롤러로 취급되기 때문에 따로 .overrideUserInterfaceStyle 적용을 통해 강제 다크 모드를 적용해 주어야 한다.
+   * 문제 해결 방법
+     * 네비게이션컨트롤러에도 다크모드 강제 적용하여 해결
+       ```swift
+         override func viewDidLoad() {
+           super.viewDidLoad()
+           self.navigationController?.overrideUserInterfaceStyle = .dark
+         }
+       ```
 </br>
 
 ## Commit Convention
