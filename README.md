@@ -16,7 +16,9 @@
 
 * 구동 화면
 
-![앨런날씨앱](https://user-images.githubusercontent.com/22342277/195771483-977b0ec4-7346-4c4f-a098-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/22342277/195771483-977b0ec4-7346-4c4f-a098-">
+</p>
 
 </br>
 
