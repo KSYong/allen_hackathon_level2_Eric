@@ -46,9 +46,36 @@
 
 ## 폴더 구조
 
-</br>
+📦allen_hackathon_level2
+ ┣ 📂Assets.xcassets
+ ┃ ┣ 📂AccentColor.colorset
+ ┃ ┃ ┗ 📜Contents.json
+ ┃ ┣ 📂AppIcon.appiconset
+ ┃ ┃ ┗ 📜Contents.json
+ ┃ ┗ 📜Contents.json
+ ┣ 📂Base.lproj
+ ┃ ┣ 📜LaunchScreen.storyboard
+ ┃ ┗ 📜Main.storyboard
+ ┣ 📂Controllers
+ ┃ ┣ 📜MainViewController.swift
+ ┃ ┣ 📜PrivacyViewController.swift
+ ┃ ┣ 📜SearchViewController.swift
+ ┃ ┗ 📜SettingsTableViewController.swift
+ ┣ 📂Helpers
+ ┃ ┣ 📜Constants.swift
+ ┃ ┗ 📜Storage.swift
+ ┣ 📂Models
+ ┃ ┣ 📜DataManager.swift
+ ┃ ┗ 📜WeatherData.swift
+ ┣ 📂Networking
+ ┃ ┗ 📜NetworkManager.swift
+ ┣ 📂Views
+ ┃ ┗ 📜SearchTableViewCell.swift
+ ┣ 📜AppDelegate.swift
+ ┣ 📜Info.plist
+ ┗ 📜SceneDelegate.swift
     
-작성 예정
+
 
 </br>
 
