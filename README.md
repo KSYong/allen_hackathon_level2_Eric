@@ -102,5 +102,17 @@
 
 </br>
 
+## Commit Convention
+
+커밋 컨벤션은 Udacity Git Commit Message Style Guide 를 따릅니다.
+
+* feat: A new feature
+* fix: A bug fix
+* docs: Changes to documentation
+* style: Formatting, missing semi colons, etc; no code change
+* refactor: Refactoring production code
+* test: Adding tests, refactoring test; no production code change
+* chore: Updating build tasks, package manager configs, etc; no production code change
+
 
 
