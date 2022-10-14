@@ -15,7 +15,12 @@
 * 팀원 : 권승용 [https://github.com/KSYong]
 
 * 구동 화면
-   * 도시 탐색 
+  * 도시 탐색 <p align="center">
+<img src="https://user-images.githubusercontent.com/22342277/195771925-68ceecc5-296b-4203-a0d5-ed1be89ebaad.gif" style="width:300px"/>
+</p>
+    
+  * 위치 설정 끄기
+  * 위치 설정 켜기
 <p align="center">
 <img src="https://user-images.githubusercontent.com/22342277/195771925-68ceecc5-296b-4203-a0d5-ed1be89ebaad.gif" style="width:300px"/>
 </p>
