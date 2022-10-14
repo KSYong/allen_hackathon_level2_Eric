@@ -47,7 +47,6 @@ class MainViewController: UIViewController {
     
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
-        print("뷰디드로드")
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         self.navigationController?.overrideUserInterfaceStyle = .dark

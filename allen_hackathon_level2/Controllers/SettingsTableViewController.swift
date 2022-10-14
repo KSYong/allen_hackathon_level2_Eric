@@ -25,20 +25,8 @@ class SettingsTableViewController: UITableViewController {
         
         locationManager = CLLocationManager()
         /// NotificationCenter를 활용해 현재 위치 사용 설정을 완료 후 되돌아왔음을 알고, 스위치 정보를 업데이트한다.
-        if #available(iOS 13.0, *) {
-            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIScene.willEnterForegroundNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.didBecomeActiveNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.willEnterForegroundNotification, object: nil)
-        } else {
-            NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.willEnterForegroundNotification, object: nil)
-        }
-//        observer = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main, using: { [unowned self] notification in
-//            if hasLocationPermission() {
-//                gpsGrantedSwitch.setOn(true, animated: true)
-//            } else {
-//                gpsGrantedSwitch.setOn(false, animated: true)
-//            }
-//        })
+        NotificationCenter.default.addObserver(self, selector: #selector(activateSwitch), name: UIApplication.didBecomeActiveNotification, object: nil)
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -55,7 +43,7 @@ class SettingsTableViewController: UITableViewController {
         }
         print(gpsGrantedSwitch.isOn)
     }
-
+    
     @objc func activateSwitch() {
         if hasLocationPermission() {
             gpsGrantedSwitch.setOn(true, animated: true)
@@ -67,42 +55,42 @@ class SettingsTableViewController: UITableViewController {
     @IBAction func gpsGrantedSwitchTapped(_ sender: UISwitch) {
         if gpsGrantedSwitch.isOn {
             let alertController = UIAlertController(title: "위치 권한을 허용하시겠습니까?", message: "설정에서 권한을 허용할 수 있습니다.", preferredStyle: .alert)
-
+            
             let okAction = UIAlertAction(title: "설정으로!", style: .default, handler: {(cAlertAction) in
                 //Redirect to Settings app
                 UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
             })
-
+            
             let cancelAction = UIAlertAction(title: "싫어요", style: .destructive)
-
+            
             alertController.addAction(cancelAction)
             alertController.addAction(okAction)
-
+            
             self.present(alertController, animated: true, completion: nil)
         } else {
             let alertController = UIAlertController(title: "위치 권한을 제한하시겠습니까?", message: "설정에서 권한을 제한할 수 있습니다.", preferredStyle: .alert)
-
+            
             let okAction = UIAlertAction(title: "설정으로!", style: .default, handler: {(cAlertAction) in
                 //Redirect to Settings app
                 UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
             })
-
+            
             let cancelAction = UIAlertAction(title: "싫어요", style: .destructive)
-
+            
             alertController.addAction(cancelAction)
             alertController.addAction(okAction)
-
+            
             self.present(alertController, animated: true, completion: nil)
         }
-
+        
         if hasLocationPermission() {
             gpsGrantedSwitch.setOn(true, animated: true)
         } else {
             gpsGrantedSwitch.setOn(false, animated: true)
         }
-
-//        gpsPermission?.toggle()
-//        gpsGrantedSwitch.isOn.toggle()
+        
+        //        gpsPermission?.toggle()
+        //        gpsGrantedSwitch.isOn.toggle()
         delegate?.sendLocationPermission(isGranted: gpsGrantedSwitch.isOn)
     }
     
@@ -130,12 +118,12 @@ class SettingsTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 2
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {
@@ -144,7 +132,7 @@ class SettingsTableViewController: UITableViewController {
             return 3
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
             switch indexPath.row {
