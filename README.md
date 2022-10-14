@@ -46,6 +46,7 @@
 
 ## 폴더 구조
 
+```
 📦allen_hackathon_level2
  ┣ 📂Assets.xcassets
  ┃ ┣ 📂AccentColor.colorset
@@ -74,7 +75,7 @@
  ┣ 📜AppDelegate.swift
  ┣ 📜Info.plist
  ┗ 📜SceneDelegate.swift
-    
+```
 
 
 </br>
