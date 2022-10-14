@@ -16,7 +16,8 @@
 
 * 구동 화면
 * 
-![앨런날씨앱](https://user-images.githubusercontent.com/22342277/195771925-68ceecc5-296b-4203-a0d5-ed1be89ebaad.gif)
+<img src="https://user-images.githubusercontent.com/22342277/195771925-68ceecc5-296b-4203-a0d5-ed1be89ebaad.gif" style="width:200px">
+</img>
 
 
 </br>
