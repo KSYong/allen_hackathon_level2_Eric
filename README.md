@@ -58,13 +58,13 @@
  ┃ ┣ 📜LaunchScreen.storyboard
  ┃ ┗ 📜Main.storyboard
  ┣ 📂Controllers
- ┃ ┣ 📜MainViewController.swift
- ┃ ┣ 📜PrivacyViewController.swift
- ┃ ┣ 📜SearchViewController.swift
- ┃ ┗ 📜SettingsTableViewController.swift
+ ┃ ┣ 📜MainViewController.swift // 홈 뷰 컨트롤러
+ ┃ ┣ 📜PrivacyViewController.swift // 개인정보처리방침 모달 화면 뷰 컨트롤러
+ ┃ ┣ 📜SearchViewController.swift // 도시 이름 검색 화면 뷰 컨트롤러
+ ┃ ┗ 📜SettingsTableViewController.swift // 설정 화면 뷰 컨트롤러
  ┣ 📂Helpers
- ┃ ┣ 📜Constants.swift
- ┃ ┗ 📜Storage.swift
+ ┃ ┣ 📜Constants.swift 
+ ┃ ┗ 📜Storage.swift 
  ┣ 📂Models
  ┃ ┣ 📜DataManager.swift
  ┃ ┗ 📜WeatherData.swift
