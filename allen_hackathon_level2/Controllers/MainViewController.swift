@@ -9,10 +9,12 @@ import UIKit
 import MapKit
 import CoreLocation
 
+// MARK: - SendWeatherDataDelegate
 protocol SendWeatherDataDelegate {
     func sendWeatherData(data: WeatherData)
 }
 
+// MARK: - SendLocationPermissionDelegate
 protocol SendLocationPermissionDelegate {
     func sendLocationPermission(isGranted: Bool)
 }
@@ -48,28 +50,40 @@ class MainViewController: UIViewController {
     // MARK: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
         overrideUserInterfaceStyle = .dark
         self.navigationController?.overrideUserInterfaceStyle = .dark
+        locationMapView.isHidden = true
         
         locationManagerSetup()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     // 네비게이션 바 숨기기
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        print("viewWillLayoutSubViews")
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     /// 위치권한 업데이트
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        if !gpsPermission && !didSelectCity {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "showSearchVC", sender: self)
-            }
-        }
-
+        print("viewDidAppear")
+        
+//        if !gpsPermission && !didSelectCity {
+//            self.performSegue(withIdentifier: "showSearchVC", sender: self)
+//        }
+        
         if isCurrentLocation == true {
             grantLocationPermissionButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
             currentLocationIndicatorLabel.text = "현재 위치 사용 중"
@@ -85,8 +99,11 @@ class MainViewController: UIViewController {
         }
     }
     
+    
+    
     /// 위치 권한 획득을 위한 locationManager 설정
     func locationManagerSetup() {
+        print("locationManagerSetup")
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -95,9 +112,13 @@ class MainViewController: UIViewController {
             gpsPermission = true
             isCurrentLocation = true
             currentLocation = locationManager.location
-            setupWeatherDetails(lat: currentLocation.coordinate.latitude, lon: currentLocation.coordinate.longitude)
             setupCurrentLocationLabel()
-            setupMapView(center: CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude))
+            if currentLocation != nil {
+                setupWeatherDetails(lat: currentLocation.coordinate.latitude, lon: currentLocation.coordinate.longitude)
+                setupMapView(center: CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude))
+            } else {
+            }
+            
         } else {
             gpsPermission = false
         }
@@ -105,6 +126,7 @@ class MainViewController: UIViewController {
     
     /// 사용자가 위치 서비스 이용에 동의했을 경우, 현재 위치 정보를 기반으로 도시 이름 표시하기
     func setupCurrentLocationLabel() {
+        print("setupCurrentLocationLabel")
         lookUpCurrentLocation { placemark in
             DispatchQueue.main.async {
                 guard let placemark = placemark else {
@@ -118,6 +140,7 @@ class MainViewController: UIViewController {
     
     // 맵뷰 설정하기
     func setupMapView(center: CLLocationCoordinate2D ) {
+        print("setupMapView")
         let region = MKCoordinateRegion( center: center, latitudinalMeters: CLLocationDistance(exactly: 10000)!, longitudinalMeters: CLLocationDistance(exactly: 10000)!)
         locationMapView.setRegion(locationMapView.regionThatFits(region), animated: true)
         locationMapView.showsUserLocation = true
@@ -125,6 +148,7 @@ class MainViewController: UIViewController {
     
     // 날씨 정보 라벨 채우기
     func setupWeatherDetails(lat: Double, lon: Double) {
+        print("setupWeatherDetails")
         networkManager.getWeatherJsonData(latitude: lat, longitude: lon) { detailData, error in
             let weatherIconName = detailData!.weather![0].icon
             var weatherIcon: UIImage?
@@ -168,7 +192,7 @@ class MainViewController: UIViewController {
                 weatherIcon = UIImage(systemName: "snowflake")
             case "50n":
                 weatherIcon = UIImage(systemName: "cloud.fog.fill")
-
+                
             default:
                 weatherIcon = UIImage(systemName: "exclamationmark.triangle.fill")
             }
@@ -182,11 +206,13 @@ class MainViewController: UIViewController {
                 self.dailyMaximumTempLabel.text = "최고 : " + String(Int(round(detailData!.main!.tempMax!))) + "°"
                 self.humidityLabel.text = "습도 : " + String(detailData!.main!.humidity!) + "%"
                 self.weatherDescriptionLabel.text = detailData!.weather![0].weatherDescription
+                self.locationMapView.isHidden = false
             }
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("prepare")
         if segue.identifier == "showSearchVC" {
             let searchVC = segue.destination as! SearchViewController
             searchVC.delegate = self
@@ -198,6 +224,7 @@ class MainViewController: UIViewController {
     
     /// 위치 정보 사용 권한 획득 버튼 눌렀을 때 실행되는 함수
     @IBAction func grantLocationButtonTapped(_ sender: UIButton) {
+        print("grantLocationButtonTapped")
         // 앱의 위치 정보 사용 권한은 앱이 처음 실행될 때 한 번만 물어본다.
         // 따라서 이후에는 alert를 이용해 디바이스의 설정 화면으로 이동해서 사용권한을 획득할 수 있도록 안내해야 한다.
         
@@ -231,15 +258,24 @@ class MainViewController: UIViewController {
             // 따로 아무런 반응이 없도록 해서 지역 검색 하도록 유도
         }
     }
+    
+    @IBAction func searchButtonTapped(_ sender: Any) {
+        print("searchButtonTapped")
+        performSegue(withIdentifier: "showSearchVC", sender: self)
+    }
 }
 
+// MARK: - CLLocationManagerDelegate
 extension MainViewController: CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        print("locationManagerDidChangeAuthorization")
         switch manager.authorizationStatus {
         case .denied, .notDetermined, .restricted:
+            locationManager.startUpdatingLocation()
             gpsPermission = false
         case .authorizedAlways, .authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
             currentLocation = locationManager.location
             gpsPermission = true
         @unknown default:
@@ -248,6 +284,7 @@ extension MainViewController: CLLocationManagerDelegate {
     }
     
     func lookUpCurrentLocation(completionHandler: @escaping (CLPlacemark?) -> Void ) {
+        print("lookUpCurrentLocation")
         // Use the last reported location.
         if let lastLocation = self.locationManager.location {
             let geocoder = CLGeocoder()
@@ -294,9 +331,11 @@ extension MainViewController: CLLocationManagerDelegate {
     }
 }
 
+// MARK: - SendWeatherDataDeleagte
 extension MainViewController: SendWeatherDataDelegate {
     
     func sendWeatherData(data: WeatherData) {
+        print("sendWeatherData")
         currentCityNameLabel.text = data.cityName
         setupWeatherDetails(lat: data.latitude, lon: data.longitude)
         setupMapView(center: CLLocationCoordinate2D(latitude: data.latitude, longitude: data.longitude))
@@ -309,6 +348,7 @@ extension MainViewController: SendWeatherDataDelegate {
 
 extension MainViewController: SendLocationPermissionDelegate {
     func sendLocationPermission(isGranted: Bool) {
+        print("sendLocationPermission")
         if gpsPermission != isGranted {
             // gpsPermission이 설정 뷰컨에서 넘어온 값과 다르다면
             if hasLocationPermission() {

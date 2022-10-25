@@ -84,7 +84,6 @@ extension SearchViewController: UITableViewDelegate {
             delegate?.sendWeatherData(data: filteredWeatherData[indexPath.row])
         }
         self.navigationController?.popViewController(animated: true)
-
     }
 }
 

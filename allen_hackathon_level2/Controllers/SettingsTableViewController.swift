@@ -29,11 +29,6 @@ class SettingsTableViewController: UITableViewController {
         
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if hasLocationPermission() {
