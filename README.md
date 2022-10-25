@@ -154,6 +154,40 @@
            super.viewDidLoad()
            self.navigationController?.overrideUserInterfaceStyle = .dark
          }
+        ```
+* ### changing items while animating can result in a corrupted navigation bar 오류 
+  * 문제 발생 양상
+    * performSegue를 통해 도시 탐색 화면으로 이동 후, 네비게이션바의 Back 버튼을 탭해서 메인 화면으로 돌아가면 해당 에러 메시지와 함께 앱이 멈추는 현상 (실제 디바이스에서만 발생) 
+  * 문제 발생 이유
+    * 메인 뷰에서는 네비게이션 바를 숨기는데, 해당 로직은 다음과 같다. 
+      ```swift
+      // MainViewController.swift
+      override func viewWillLayoutSubViews() {
+        super.viewWillLayoutSubView()
+        self.navigationController?.setNavigationBarHidden(true, animated:true)
+      }
+      ```
+    * 도시 탐색 뷰에서는 네비게이션 바를 다시 보이게 한다. 
+      ```swift
+      // SearchViewController.swift
+      override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+      }
+      ```
+    * 해당 오류는 navigation controller에 등록되어 있는 뷰의 pop이나 push가 완료되지 않았을 때 pop이나 push를 하려고 할 때 나타난다고 한다. 처음에는 앱이 멈추는 이유를 찾기 어려웠는데, 차근차근 디버깅해본 결과 네비게이션 바를 숨기고 나타내는 과정에서 문제가 있었다. 
+   * 문제 해결 방법
+     * 메인 뷰 컨트롤러 내부에서 네비게이션 바를 숨기고 보이는 로직을 모두 처리하게 하였다. 또한 viewWillLayoutSubView() 가 아닌 viewWillAppear(), viewWillDisappear()에서 해당 동작을 수행하였다.
+       ```swift
+       override func viewWillAppear(_ animated: Bool) {
+          super.viewWillAppear(animated)
+          self.navigationController?.isNavigationBarHidden = true
+       }
+    
+       override func viewWillDisappear(_ animated: Bool) {
+          super.viewWillDisappear(animated)
+          self.navigationController?.isNavigationBarHidden = false
+       }  
        ```
 </br>
 
